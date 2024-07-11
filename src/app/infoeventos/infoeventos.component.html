@@ -1,0 +1,10 @@
+<div *ngIf="event$ | async as event">
+  <h2>{{ event.title }}</h2>
+  <img [src]="event.image" alt="{{ event.title }}" class="img-fluid">
+  <p>{{ event.description }}</p>
+  <p><strong>Address:</strong> {{ event.address }}</p>
+  <p><strong>Date:</strong> {{ event.date | date }}</p>
+  <google-map height="400px" width="100%" [center]="center" [zoom]="zoom">
+    <map-marker [position]="markerPosition"></map-marker>
+  </google-map>
+</div>

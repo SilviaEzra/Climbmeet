@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-md-4" *ngFor="let event of events$ | async">
+      <div class="card mb-4 mt-4">
+        <img [src]="event.image" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ event.title }}</h5>
+          <p class="card-text">{{ event.description }}</p>
+          <p class="card-text"><small class="text-muted">{{ event.address }}</small></p>
+          <p class="card-text"><small class="text-muted">{{ event.date | date }}</small></p>
+          <button class="btn btn-danger" (click)="deleteEvent(event.id)">Eliminar</button>
+          <a [routerLink]="['/infoeventos', event.id]" class="btn btn-info">Ver más</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,37 @@
+<div class="container">
+    <h2 class="my-4">Ubicaciones de Escalada</h2>
+    <div class="row">
+      <div class="col-md-8">
+        <google-map height="500px" width="100%" [center]="center" [zoom]="zoom">
+          <map-marker *ngFor="let location of filteredLocations" [position]="location.position" [title]="location.title"></map-marker>
+        </google-map>
+      </div>
+      <div class="col-md-4">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="deportiva" id="deportivaCheck" (change)="toggleType('deportiva')" checked>
+          <label class="form-check-label" for="deportivaCheck">Escalada Deportiva</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="boulder indoor" id="boulderIndoorCheck" (change)="toggleType('boulder indoor')" checked>
+          <label class="form-check-label" for="boulderIndoorCheck">Boulder Indoor</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="boulder outdoor" id="boulderOutdoorCheck" (change)="toggleType('boulder outdoor')" checked>
+          <label class="form-check-label" for="boulderOutdoorCheck">Boulder Outdoor</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="clásica" id="clasicaCheck" (change)="toggleType('clásica')" checked>
+          <label class="form-check-label" for="clasicaCheck">Escalada Clásica</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="rocódromo" id="rocodromoCheck" (change)="toggleType('rocódromo')" checked>
+          <label class="form-check-label" for="rocodromoCheck">Rocódromo</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="rocódromo gratuito" id="rocodromoGratuitoCheck" (change)="toggleType('rocódromo gratuito')" checked>
+          <label class="form-check-label" for="rocodromoGratuitoCheck">Rocódromo Gratuito</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  

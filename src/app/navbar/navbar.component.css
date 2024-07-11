@@ -1,0 +1,39 @@
+.nav-link.login, .nav-link.register {
+  color: #EC6476 !important;
+  white-space: nowrap; 
+  font-size: 1rem; 
+  font-weight: 500;
+  transition: color 0.3s;
+  cursor: pointer; /* Añadido para cambiar el cursor a una mano */
+}
+
+.nav-link.login:hover, .nav-link.register:hover {
+  color: #EC6476 !important;
+}
+
+.nav-link.separator {
+  color: #EC6476;
+  margin: 0 10px; 
+  font-size: 1.2rem; 
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav.mx-auto {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.navbar-nav.ml-auto {
+  margin-left: auto !important;
+  margin-right: 5%;
+}
+
+.navbar-brand {
+  margin-left: 2%;
+}
+
+.navbar-nav.mx-auto .nav-item {
+  margin: 0 20px; 
+}

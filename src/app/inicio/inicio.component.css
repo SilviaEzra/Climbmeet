@@ -1,0 +1,40 @@
+.carousel-item img {
+    max-height: 500px;
+    object-fit: cover;
+  }
+  
+  .carousel {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .carousel-inner {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .col-md-6 {
+    padding: 0;
+  }
+  
+  .display-4 {
+    font-size: 3.5rem;
+  }
+  
+  h2 {
+    font-size: 3.5rem; 
+    margin-left: 2rem; 
+    font-weight: 600;
+  }
+  
+  p {
+    margin-left: 2rem; 
+    margin-right: 2rem;
+    margin-top: 3rem;
+  }
+  
+  
+  .text-white.ml-2.p-4 {
+    margin-left: 2rem;
+  }
+  

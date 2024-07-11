@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 p-0">
+      <div class="sidebar bg-rosado text-white vh-100 d-flex flex-column">
+        <a (click)="showProfile()" class="nav-link text-white py-3 border-bottom text-center">Perfil</a>
+        <a class="nav-link text-white py-3 border-bottom text-center" data-bs-toggle="modal" data-bs-target="#createEventModal">Crear Evento</a>
+        <a (click)="showEvents()" class="nav-link text-white py-3 border-bottom text-center">Ver Eventos</a>
+        <a href="#" class="nav-link text-white py-3 border-bottom text-center">Mensajes</a>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <router-outlet></router-outlet> <!-- Esto cargará los componentes secundarios -->
+      <app-profile *ngIf="showProfileFlag"></app-profile>
+      <app-login *ngIf="showLoginFlag" (loginSuccess)="showProfile()"></app-login>
+      <app-eventos-creados *ngIf="showEventsFlag"></app-eventos-creados>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createEventModalLabel">Crear Evento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" #eventForm="ngForm">
+          <div class="mb-3">
+            <label for="title" class="form-label">Título del Evento</label>
+            <input type="text" class="form-control" id="title" required [(ngModel)]="newEvent.title" name="title">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea class="form-control" id="description" rows="3" required [(ngModel)]="newEvent.description" name="description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="location" class="form-label">Ubicación</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="location" [(ngModel)]="newEvent.address" name="address" placeholder="Buscar ubicación">
+              <button type="button" class="btn btn-outline-secondary" (click)="performSearch()">Buscar</button>
+            </div>
+            <google-map height="400px" width="100%" [center]="center" [zoom]="zoom" (mapClick)="onMapClick($event)">
+              <map-marker [position]="markerPosition" [options]="markerOptions"></map-marker>
+            </google-map>
+          </div>
+          <div class="mb-3">
+            <label for="date" class="form-label">Fecha</label>
+            <input type="date" class="form-control" id="date" required [(ngModel)]="newEvent.date" name="date">
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Evento</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
