@@ -1,0 +1,130 @@
+.blog-home2 h1,
+.blog-home2 h2,
+.blog-home2 h3,
+.blog-home2 h4,
+.blog-home2 h5,
+.blog-home2 h6 {
+  color: #3e4555;
+}
+
+.blog-home2 .font-weight-medium {
+  font-weight: 500;
+}
+
+.blog-home2 .bg-light {
+  background-color: #f4f8fa !important;
+}
+
+.blog-home2 .subtitle {
+  color: #8d97ad;
+  line-height: 24px;
+}
+
+.blog-home2 .text-themecolor {
+  color: #EC6476;
+}
+
+.blog-home2 h5 {
+  line-height: 22px;
+  font-size: 18px;
+}
+
+.blog-home2 a.link {
+  color: #3e4555;
+}
+
+.blog-home2 a.link:hover {
+  color: #EC6476;
+}
+
+.blog-home2 .on-hover {
+  -webkit-transition: 0.2s ease-in;
+  -o-transition: 0.2s ease-in;
+  transition: 0.2s ease-in;
+}
+
+.blog-home2 .on-hover:hover {
+  -webkit-transform: translateY(-10px);
+  -ms-transform: translateY(-10px);
+  transform: translateY(-10px);
+}
+
+.blog-home2 .date-pos {
+  right: 10px;
+  top: 10px;
+}
+
+.blog-home2 .date-pos span {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+.blog-home2 .bg-info-gradiant {
+  background: #EC6476;
+  background: -webkit-linear-gradient(left, #EC6476 0%, #EC6476 100%);
+  background: -o-linear-gradient(left, #EC6476 0%, #EC6476 100%);
+  background: linear-gradient(to right, #EC6476 0%, #EC6476 100%);
+}
+
+.rounded-card {
+  border: 1px solid #EC6476; /* Color del borde */
+  border-radius: 10px; /* Radio de borde redondeado */
+  height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+}
+
+.card {
+  position: relative;
+  height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.date-pos {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #EC6476;
+  padding: 5px 10px;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Estilos para las imágenes de tamaño fijo */
+.fixed-img-size {
+  width: 100%;
+  height: 200px; /* Ajusta la altura según sea necesario */
+  object-fit: cover; /* Hace que la imagen cubra el contenedor sin distorsionar */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.eventos-container {
+  max-height: 600px; /* Ajusta esta altura según necesites */
+  overflow-y: scroll;
+}
+
+.eventos-container::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.eventos-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.eventos-container::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.eventos-container::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}

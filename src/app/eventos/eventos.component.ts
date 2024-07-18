@@ -38,8 +38,11 @@ export class EventosComponent implements AfterViewInit, OnInit {
     image: 'assets/event-placeholder.jpg'
   };
 
-  center: google.maps.LatLngLiteral = { lat: 37.7749, lng: -122.4194 };
-  zoom = 8;
+  selectedFile: File | null = null;
+  isEditing: boolean = false;
+
+  center: google.maps.LatLngLiteral = { lat: 41.3851, lng: 2.1734 }; // Coordenadas de Barcelona
+  zoom = 12; // Ajusta el nivel de zoom según tus necesidades
   markerOptions: google.maps.MarkerOptions = { draggable: true };
   markerPosition: google.maps.LatLngLiteral = this.center;
 
@@ -48,7 +51,7 @@ export class EventosComponent implements AfterViewInit, OnInit {
 
   isLoggedIn: boolean = false;
   showProfileFlag: boolean = false;
-  showEventsFlag: boolean = true; // Mostrar eventos por defecto
+  showEventsFlag: boolean = true;
   showLoginFlag: boolean = false;
 
   constructor(
@@ -84,11 +87,23 @@ export class EventosComponent implements AfterViewInit, OnInit {
           const place = this.autocomplete.getPlace();
           if (place.geometry) {
             const location = place.geometry.location;
-            this.newEvent.location = `${location.lat()},${location.lng()}`;
-            this.newEvent.address = place.formatted_address;
-            this.center = { lat: location.lat(), lng: location.lng() };
-            this.zoom = 15;
-            this.markerPosition = this.center;
+            if (location && typeof location.lat === 'function' && typeof location.lng === 'function') {
+              const lat = location.lat();
+              const lng = location.lng();
+              if (!isNaN(lat) && !isNaN(lng)) {
+                this.newEvent.location = `${lat},${lng}`;
+                this.newEvent.address = place.formatted_address;
+                this.center = { lat, lng };
+                this.zoom = 15;
+                this.markerPosition = this.center;
+              } else {
+                console.error('Invalid location data');
+              }
+            } else {
+              console.error('Invalid location object');
+            }
+          } else {
+            console.error('No geometry found for the selected place');
           }
         });
       });
@@ -103,53 +118,134 @@ export class EventosComponent implements AfterViewInit, OnInit {
       this.geocoder.geocode({ address: address }, (results: any, status: any) => {
         if (status === 'OK' && results[0]) {
           const location = results[0].geometry.location;
-          this.ngZone.run(() => {
-            this.newEvent.location = `${location.lat()},${location.lng()}`;
-            this.newEvent.address = results[0].formatted_address;
-            this.center = { lat: location.lat(), lng: location.lng() };
-            this.zoom = 15;
-            this.markerPosition = this.center;
-          });
+          if (location && typeof location.lat === 'function' && typeof location.lng === 'function') {
+            const lat = location.lat();
+            const lng = location.lng();
+            if (!isNaN(lat) && !isNaN(lng)) {
+              this.ngZone.run(() => {
+                this.newEvent.location = `${lat},${lng}`;
+                this.newEvent.address = results[0].formatted_address;
+                this.center = { lat, lng };
+                this.zoom = 15;
+                this.markerPosition = this.center;
+              });
+            } else {
+              console.error('Invalid location data');
+            }
+          } else {
+            console.error('Invalid location object');
+          }
         } else {
           console.error('Geocode was not successful for the following reason: ' + status);
         }
       });
+    } else {
+      console.error('Geocoder not initialized');
     }
   }
 
   onMapClick(event: google.maps.MapMouseEvent) {
     if (event.latLng) {
       const location = event.latLng.toJSON();
-      this.newEvent.location = `${location.lat},${location.lng}`;
-      this.markerPosition = location;
+      if (location && !isNaN(location.lat) && !isNaN(location.lng)) {
+        this.newEvent.location = `${location.lat},${location.lng}`;
+        this.markerPosition = location;
 
-      if (this.geocoder) {
-        this.geocoder.geocode({ location: location }, (results: any, status: any) => {
-          if (status === 'OK' && results[0]) {
-            this.ngZone.run(() => {
-              this.newEvent.address = results[0].formatted_address;
-            });
-          } else {
-            console.error('Geocode was not successful for the following reason: ' + status);
-          }
-        });
+        if (this.geocoder) {
+          this.geocoder.geocode({ location: location }, (results: any, status: any) => {
+            if (status === 'OK' && results[0]) {
+              this.ngZone.run(() => {
+                this.newEvent.address = results[0].formatted_address;
+              });
+            } else {
+              console.error('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        }
+      } else {
+        console.error('Invalid location data');
       }
     }
   }
 
-  onSubmit() {
-    this.eventService.addEvent({ ...this.newEvent }).subscribe(() => {
-      this.newEvent = { id: 0, title: '', description: '', location: '', address: '', date: '', image: 'assets/event-placeholder.jpg' };
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
 
+  onSubmit() {
+    const formData = new FormData();
+    formData.append('title', this.newEvent.title);
+    formData.append('description', this.newEvent.description);
+    formData.append('location', this.newEvent.location);
+    formData.append('address', this.newEvent.address);
+    formData.append('date', this.newEvent.date);
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+
+    if (this.isEditing) {
+      this.eventService.updateEvent(this.newEvent.id, formData).subscribe(() => {
+        this.resetForm();
+        this.closeModal();
+        this.showEvents();
+      }, error => {
+        console.error('Error updating event:', error);
+      });
+    } else {
+      this.eventService.addEvent(formData).subscribe(() => {
+        this.resetForm();
+        this.closeModal();
+        this.showEvents();
+      }, error => {
+        console.error('Error creating event:', error);
+      });
+    }
+  }
+
+  resetForm() {
+    this.newEvent = { id: 0, title: '', description: '', location: '', address: '', date: '', image: 'assets/event-placeholder.jpg' };
+    this.selectedFile = null;
+    this.isEditing = false;
+  }
+
+  closeModal() {
+    const modalElement = document.getElementById('createEventModal');
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+      modalInstance.hide();
+    }
+  }
+
+  openEditModal(event: Event) {
+    this.newEvent = { ...event };
+    this.isEditing = true;
+    this.openModal();
+  }
+
+  openModal() {
+    const modalElement = document.getElementById('createEventModal');
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+      modalInstance.show();
+    }
+  }
+
+  handleCreateEventClick() {
+    if (this.isLoggedIn) {
       const modalElement = document.getElementById('createEventModal');
       if (modalElement) {
-        const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-        modalInstance.hide();
+        const modalInstance = new bootstrap.Modal(modalElement);
+        modalInstance.show();
       }
-      this.showEvents();
-    }, error => {
-      console.error('Error creating event:', error);
-    });
+    } else {
+      const warningModalElement = document.getElementById('warningModal');
+      if (warningModalElement) {
+        const warningModalInstance = new bootstrap.Modal(warningModalElement);
+        warningModalInstance.show();
+      }
+    }
   }
 
   deleteEvent(id: number) {

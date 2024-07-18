@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -18,9 +18,9 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  login() {
-    if (!this.username || !this.password) {
-      console.error('Username and Password are required');
+  login(loginForm: NgForm) {
+    if (loginForm.invalid) {
+      console.error('Form is invalid');
       return;
     }
 

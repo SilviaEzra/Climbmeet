@@ -1,82 +1,119 @@
-<section class="h-100 bg-dark">
+<section class="h-100">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col">
-        <div class="card card-registration my-4">
+      <div class="col-xl-8 col-lg-10 col-md-12">
+        <div class="card card-registration my-4 p-4">
           <div class="row g-0">
             <div class="col-xl-6 d-none d-xl-block">
-              <img src="assets/img4.jpg" alt="Sample photo" class="img-fluid" />
+              <img src="assets/inicio2.jpg" alt="Sample photo" class="img-fluid" />
             </div>
             <div class="col-xl-6">
-              <div class="card-body p-md-5 text-black">
-                <h3 class="mb-5">Registro usuario</h3>
-                <form (ngSubmit)="register()">
-                  <div class="form-outline mb-4">
+              <div class="card-body p-md-4 text-black">
+                <h3 class="mb-4">Registro usuario</h3>
+                <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+                  <div class="form-outline mb-3">
                     <label class="form-label" for="username">Username</label>
-                    <input type="text" id="username" class="form-control form-control-lg" [(ngModel)]="username" name="username" required />
+                    <input
+                      type="text"
+                      id="username"
+                      class="form-control form-control-lg"
+                      [(ngModel)]="username"
+                      name="username"
+                      required
+                      #usernameModel="ngModel"
+                    />
+                    <div *ngIf="usernameModel.invalid && (usernameModel.dirty || usernameModel.touched)" class="text-danger">
+                      <div *ngIf="usernameModel.errors?.['required']">Username is required</div>
+                    </div>
+                    <div *ngIf="usernameExists" class="text-danger">
+                      El nombre de usuario ya existe.
+                    </div>
                   </div>
-                  <div class="form-outline mb-4">
+                  <div class="form-outline mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control form-control-lg" id="password" [(ngModel)]="password" name="password" required />
+                    <input
+                      type="password"
+                      class="form-control form-control-lg"
+                      id="password"
+                      [(ngModel)]="password"
+                      name="password"
+                      required
+                      #passwordModel="ngModel"
+                      minlength="6"
+                    />
+                    <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="text-danger">
+                      <div *ngIf="passwordModel.errors?.['required']">Password is required</div>
+                      <div *ngIf="passwordModel.errors?.['minlength']">Password must be at least 6 characters long</div>
+                    </div>
                   </div>
-                  <div class="form-outline mb-4">
+                  <div class="form-outline mb-3">
                     <label class="form-label" for="firstName">Nombre</label>
-                    <input type="text" id="firstName" class="form-control form-control-lg" [(ngModel)]="firstName" name="firstName" />
+                    <input
+                      type="text"
+                      id="firstName"
+                      class="form-control form-control-lg"
+                      [(ngModel)]="firstName"
+                      name="firstName"
+                      required
+                    />
                   </div>
-                  <div class="form-outline mb-4">
+                  <div class="form-outline mb-3">
                     <label class="form-label" for="lastName">Apellidos</label>
-                    <input type="text" id="lastName" class="form-control form-control-lg" [(ngModel)]="lastName" name="lastName" />
+                    <input
+                      type="text"
+                      id="lastName"
+                      class="form-control form-control-lg"
+                      [(ngModel)]="lastName"
+                      name="lastName"
+                      required
+                    />
                   </div>
-                  <div class="form-outline mb-4">
+                  <div class="form-outline mb-3">
                     <label class="form-label" for="email">Email ID</label>
-                    <input type="email" id="email" class="form-control form-control-lg" [(ngModel)]="email" name="email" />
-                  </div>
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="address">Address</label>
-                    <input type="text" id="address" class="form-control form-control-lg" [(ngModel)]="address" name="address" />
-                  </div>
-                  <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                    <h6 class="mb-0 me-4">Gender: </h6>
-                    <div class="form-check form-check-inline mb-0 me-4">
-                      <input class="form-check-input" type="radio" name="gender" id="femaleGender" value="Female" [(ngModel)]="gender" />
-                      <label class="form-check-label" for="femaleGender">Female</label>
+                    <input
+                      type="email"
+                      id="email"
+                      class="form-control form-control-lg"
+                      [(ngModel)]="email"
+                      name="email"
+                      required
+                      email
+                      #emailModel="ngModel"
+                    />
+                    <div *ngIf="emailModel.invalid && (emailModel.dirty || emailModel.touched)" class="text-danger">
+                      <div *ngIf="emailModel.errors?.['required']">Email is required</div>
+                      <div *ngIf="emailModel.errors?.['email']">Invalid email format</div>
                     </div>
-                    <div class="form-check form-check-inline mb-0 me-4">
-                      <input class="form-check-input" type="radio" name="gender" id="maleGender" value="Male" [(ngModel)]="gender" />
-                      <label class="form-check-label" for="maleGender">Male</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-0">
-                      <input class="form-check-input" type="radio" name="gender" id="otherGender" value="Other" [(ngModel)]="gender" />
-                      <label class="form-check-label" for="otherGender">Other</label>
+                    <div *ngIf="emailExists" class="text-danger">
+                      El correo ya existe en nuestra base de datos.
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-md-6 mb-4">
-                      <select class="form-select" [(ngModel)]="climbingType" name="climbingType">
-                        <option value="">Tipo Escalada</option>
-                        <option value="Escalada deportiva">Escalada deportiva</option>
-                        <option value="Boulder indoor">Boulder indoor</option>
-                        <option value="Boulder outdoor">Boulder outdoor</option>
-                        <option value="Escalada clásica">Escalada clásica</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                      <select class="form-select" [(ngModel)]="climbingLevel" name="climbingLevel">
-                        <option value="">Nivel Escalada</option>
-                        <option value="Principiante (III - V+)">Principiante (III - V+)</option>
-                        <option value="Medium (V+ - 6c)">Medium (V+ - 6c)</option>
-                        <option value="Pro (6c - TOP)">Pro (6c - TOP)</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="d-flex justify-content-center pt-5">
+                  <div class="d-flex justify-content-center pt-4">
                     <button type="reset" class="btn btn-light btn-lg">Borrar</button>
-                    <button type="submit" class="btn btn-salmon btn-lg ms-2">Registrarse</button>
+                    <button type="submit" class="btn btn-salmon btn-lg ms-2" [disabled]="registerForm.invalid">Registrarse</button>
                   </div>
                 </form>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">Registro Exitoso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Registro realizado con éxito, <a (click)="navigateToLogin()" style="cursor: pointer; color: #EC6476;">inicia sesión</a> para seguir.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>

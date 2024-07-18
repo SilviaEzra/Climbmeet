@@ -1,33 +1,54 @@
 .card-registration .select-input.form-control[readonly]:not([disabled]) {
-    font-size: 1rem;
-    line-height: 2.15;
-    padding-left: .75em;
-    padding-right: .75em;
-    }
-    .card-registration .select-arrow {
-    top: 13px;
-    }
+  font-size: 1rem;
+  line-height: 2.15;
+  padding-left: .75em;
+  padding-right: .75em;
+}
+.card-registration .select-arrow {
+  top: 13px;
+}
 
-    .btn-salmon {
-        background-color: #EC6476; 
-        border-color: #EC6476;
-        color: white; 
-      }
+.btn-salmon {
+  background-color: #EC6476; 
+  border-color: #EC6476;
+  color: white; 
+}
 
-      .card-registration {
-        border-radius: 0;
-      }
-      
-      .card-registration img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Asegura que la imagen cubra todo el contenedor */
-        border-top-left-radius: .25rem;
-        border-bottom-left-radius: .25rem;
-      }
-      
-      .card-body {
-        padding: 2rem;
-      }
-      
-      
+.card-registration {
+  border-radius: 0;
+}
+
+.card-registration img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen cubra todo el contenedor */
+  border-top-left-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+}
+
+.card-body {
+  padding: 1.5rem; /* Ajusta el padding para reducir la altura */
+}
+
+.form-outline.mb-3, .form-outline.mb-4 {
+  margin-bottom: 1rem; /* Reduce el margen inferior para cada campo */
+}
+
+.card-body h3 {
+  margin-bottom: 1.5rem; /* Reduce el margen inferior del título */
+}
+
+.d-md-flex.justify-content-start.align-items-center.mb-3.py-2 {
+  margin-bottom: 1rem; /* Reduce el margen inferior del grupo de género */
+}
+
+.row .col-md-6.mb-3 {
+  margin-bottom: 1rem; /* Reduce el margen inferior de las opciones de escalada */
+}
+.has-error .form-control {
+  border-color: #dc3545;
+}
+
+.text-danger {
+  color: #dc3545;
+}

@@ -1,16 +1,29 @@
-<div class="row">
-    <div class="col-md-4" *ngFor="let event of events$ | async">
-      <div class="card mb-4 mt-4">
-        <img [src]="event.image" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">{{ event.title }}</h5>
-          <p class="card-text">{{ event.description }}</p>
-          <p class="card-text"><small class="text-muted">{{ event.address }}</small></p>
-          <p class="card-text"><small class="text-muted">{{ event.date | date }}</small></p>
-          <button class="btn btn-danger" (click)="deleteEvent(event.id)">Eliminar</button>
-          <a [routerLink]="['/infoeventos', event.id]" class="btn btn-info">Ver más</a>
+<div class="blog-home2 py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h3 class="my-3">Próximos eventos</h3>
+        <h6 class="subtitle font-weight-normal">Aquí puedes ver, crear o apuntarte a cualquier evento de escalada en Barcelona. ¿Escalamos?</h6>
+      </div>
+    </div>
+    <div class="row mt-5 eventos-container">
+      <div class="col-md-4 on-hover mb-4" *ngFor="let event of events$ | async"> <!-- Añadido mb-4 para margen inferior -->
+        <div class="card mb-4 rounded-card">
+          <a [routerLink]="['/eventos/infoeventos', event.id]">
+            <img class="card-img-top fixed-img-size" [src]="'http://localhost:3001/' + event.image" alt="Imagen del evento">
+          </a>
+          <div class="date-pos bg-info-gradiant p-2 d-inline-block text-center rounded text-white position-absolute">
+            {{ event.date | date: 'MMM' }}<span class="d-block">{{ event.date | date: 'd' }}</span>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="font-weight-medium">
+              <a [routerLink]="['/eventos/infoeventos', event.id]" class="text-decoration-none link">{{ event.title }}</a>
+            </h5>
+            <p class="mt-3">{{ event.address }}</p>
+            <a [routerLink]="['/eventos/infoeventos', event.id]" class="text-decoration-none linking text-themecolor mt-auto mb-4">Learn More</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

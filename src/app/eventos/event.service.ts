@@ -1,4 +1,4 @@
-// src/app/eventos/event.service.ts
+// event.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -12,7 +12,6 @@ export interface Event {
   address: string;
   date: string;
   image: string;
-  userId?: number;
 }
 
 @Injectable({
@@ -23,37 +22,37 @@ export class EventService {
 
   constructor(private http: HttpClient) {}
 
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
   getEvents(): Observable<Event[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.get<Event[]>(this.apiUrl, { headers }).pipe(
+    return this.http.get<Event[]>(this.apiUrl, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
 
-  addEvent(event: Event): Observable<Event> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.post<Event>(this.apiUrl, event, { headers }).pipe(
+  addEvent(event: FormData): Observable<Event> {
+    return this.http.post<Event>(this.apiUrl, event, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
 
   getEventById(id: number): Observable<Event> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.get<Event>(`${this.apiUrl}/${id}`, { headers }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  updateEvent(event: Event): Observable<void> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.put<void>(`${this.apiUrl}/${event.id}`, event, { headers }).pipe(
+    return this.http.get<Event>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
 
   deleteEvent(id: number): Observable<void> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers }).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  updateEvent(id: number, event: FormData): Observable<Event> {
+    return this.http.put<Event>(`${this.apiUrl}/${id}`, event, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }

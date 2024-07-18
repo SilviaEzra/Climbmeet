@@ -1,8 +1,12 @@
+// registro.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-registro',
@@ -22,11 +26,15 @@ export class RegistroComponent {
   climbingType: string = '';
   climbingLevel: string = '';
 
-  constructor(private authService: AuthService) {}
+  usernameExists: boolean = false;
+  emailExists: boolean = false;
+  errorMessage: string = '';
 
-  register() {
-    if (!this.username || !this.password) {
-      console.error('Username and Password are required');
+  constructor(private authService: AuthService, private router: Router) {}
+
+  register(registerForm: NgForm) {
+    if (registerForm.invalid) {
+      console.error('Form is invalid');
       return;
     }
 
@@ -42,15 +50,49 @@ export class RegistroComponent {
       climbingLevel: this.climbingLevel
     };
 
-    console.log('Datos de registro enviados:', user);
-
     this.authService.register(user).subscribe(
       response => {
         console.log('Registro exitoso', response);
+        this.usernameExists = false;
+        this.emailExists = false;
+        this.errorMessage = '';
+        this.showSuccessModal();
       },
       error => {
         console.error('Error al registrar', error);
+        this.usernameExists = false;
+        this.emailExists = false;
+        this.errorMessage = '';
+
+        if (error.error && error.error.msg) {
+          this.errorMessage = error.error.msg;
+        }
+
+        if (this.errorMessage.includes('Username')) {
+          this.usernameExists = true;
+        } else if (this.errorMessage.includes('Email')) {
+          this.emailExists = true;
+        }
       }
     );
+  }
+
+  showSuccessModal() {
+    const modalElement = document.getElementById('successModal');
+    if (modalElement) {
+      const modalInstance = new bootstrap.Modal(modalElement);
+      modalInstance.show();
+    }
+  }
+
+  navigateToLogin() {
+    const modalElement = document.getElementById('successModal');
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+    this.router.navigate(['/login']);
   }
 }

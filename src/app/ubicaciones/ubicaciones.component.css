@@ -10,3 +10,11 @@
     margin-top: 10px;
   }
   
+  .form-check-input{
+    color: #EC6476;
+  }
+
+  .form-check-input:checked {
+    background-color: #EC6476;
+    border-color: #EC6476;
+}

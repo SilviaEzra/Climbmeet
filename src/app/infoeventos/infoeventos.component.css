@@ -1,0 +1,78 @@
+.container {
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    padding-right: 15px; /* Para el scroll */
+  }
+  
+  .container::-webkit-scrollbar {
+    width: 0.5em;
+  }
+  
+  .container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .container::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  
+  .container::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+  }
+  
+  .small-img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .btn-group-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .btn-group {
+    width: auto; /* Evita que el grupo de botones ocupe todo el ancho */
+  }
+  
+  .event-content {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  .event-content::-webkit-scrollbar {
+    width: 0.5em;
+  }
+  
+  .event-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .event-content::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  
+  .event-content::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+  }
+  
+  .btn-custom {
+    background-color: #EC6476;
+    color: white;
+  }
+  
+  .btn-custom:hover {
+    background-color: #d05566;
+    color: white;
+  }
+  .bi-calendar-heart, .bi-geo-alt {
+    color:#EC6476
+  }

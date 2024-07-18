@@ -12,10 +12,12 @@ export const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
-  { path: 'eventos', component: EventosComponent },
+  { path: 'eventos', component: EventosComponent, children: [
+    { path: '', component: EventosCreadosComponent },
+    { path: 'profile', component: ProfileComponent },
+    { path: 'infoeventos/:id', component: InfoEventosComponent }
+  ]},
   { path: 'ubicaciones', component: UbicacionesComponent },
-  { path: 'eventos/profile', component: ProfileComponent },
-  { path: 'infoeventos/:id', component: InfoEventosComponent },
   { path: '', redirectTo: '/eventos', pathMatch: 'full' },
   { path: '**', redirectTo: '/eventos', pathMatch: 'full' }
 ];

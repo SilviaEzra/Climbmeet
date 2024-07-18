@@ -2,22 +2,20 @@
   <div class="row">
     <div class="col-md-3 p-0">
       <div class="sidebar bg-rosado text-white vh-100 d-flex flex-column">
-        <a (click)="showProfile()" class="nav-link text-white py-3 border-bottom text-center">Perfil</a>
-        <a class="nav-link text-white py-3 border-bottom text-center" data-bs-toggle="modal" data-bs-target="#createEventModal">Crear Evento</a>
-        <a (click)="showEvents()" class="nav-link text-white py-3 border-bottom text-center">Ver Eventos</a>
+        <a [routerLink]="['/eventos/profile']" class="nav-link text-white py-3 border-bottom text-center">Perfil</a>
+        <a class="nav-link text-white py-3 border-bottom text-center" (click)="handleCreateEventClick()">Crear Evento</a>
+        <a [routerLink]="['/eventos']" class="nav-link text-white py-3 border-bottom text-center">Ver Eventos</a>
         <a href="#" class="nav-link text-white py-3 border-bottom text-center">Mensajes</a>
       </div>
     </div>
     <div class="col-md-9">
-      <router-outlet></router-outlet> <!-- Esto cargará los componentes secundarios -->
-      <app-profile *ngIf="showProfileFlag"></app-profile>
-      <app-login *ngIf="showLoginFlag" (loginSuccess)="showProfile()"></app-login>
-      <app-eventos-creados *ngIf="showEventsFlag"></app-eventos-creados>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
 
-<!-- Modal -->
+
+<!-- Modal de Crear Evento -->
 <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -27,6 +25,7 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="onSubmit()" #eventForm="ngForm">
+          <!-- Formulario de Crear Evento -->
           <div class="mb-3">
             <label for="title" class="form-label">Título del Evento</label>
             <input type="text" class="form-control" id="title" required [(ngModel)]="newEvent.title" name="title">
@@ -49,8 +48,30 @@
             <label for="date" class="form-label">Fecha</label>
             <input type="date" class="form-control" id="date" required [(ngModel)]="newEvent.date" name="date">
           </div>
+          <div class="mb-3">
+            <label for="image" class="form-label">Imagen del Evento</label>
+            <input type="file" class="form-control" id="image" (change)="onFileChange($event)" name="image">
+          </div>
           <button type="submit" class="btn btn-primary">Crear Evento</button>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Advertencia de Registro -->
+<div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="warningModalLabel">Advertencia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Para crear un evento necesitas estar registrado. Regístrate <a [routerLink]="['/registro']" style="color: #EC6476; cursor: pointer;">aquí</a>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

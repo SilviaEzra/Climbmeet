@@ -1,37 +1,49 @@
 <div class="container">
-    <h2 class="my-4">Ubicaciones de Escalada</h2>
-    <div class="row">
-      <div class="col-md-8">
-        <google-map height="500px" width="100%" [center]="center" [zoom]="zoom">
-          <map-marker *ngFor="let location of filteredLocations" [position]="location.position" [title]="location.title"></map-marker>
-        </google-map>
+  <h2 class="my-4">Ubicaciones de Escalada</h2>
+  <div class="row">
+    <div id="description" class="ubi-content mb-5">
+      <p>Explora las mejores ubicaciones para escalar en Barcelona y sus alrededores. Nuestro mapa interactivo te permite encontrar diversos tipos de sitios de escalada, desde rocódromos y paredes de escalada deportiva hasta emocionantes rutas de boulder tanto en interiores como al aire libre. Ya seas un principiante buscando un lugar seguro para practicar o un escalador experimentado en busca de nuevos desafíos, nuestras ubicaciones cuidadosamente seleccionadas ofrecen algo para todos. Usa los filtros para descubrir ubicaciones específicas según tu tipo de escalada preferido y planifica tu próxima aventura vertical en la vibrante región de Barcelona.</p>
+    </div>
+    <div class="col-md-8 mb-5">
+      <google-map height="500px" width="100%" [center]="center" [zoom]="zoom">
+        <map-marker 
+          *ngFor="let location of filteredLocations" 
+          [position]="getLocationPosition(location)" 
+          [title]="location.name"
+          [icon]="iconUrlMap[location.type]"
+          (mapClick)="openInfoWindow(marker, location)"
+          #marker="mapMarker">
+        </map-marker>
+        <map-info-window>
+          <div [innerHTML]="infoContent"></div>
+        </map-info-window>
+      </google-map>
+    </div>
+    <div class="col-md-4">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="deportiva" id="deportivaCheck" (change)="toggleType('deportiva')" checked>
+        <label class="form-check-label" for="deportivaCheck">Escalada Deportiva</label>
       </div>
-      <div class="col-md-4">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="deportiva" id="deportivaCheck" (change)="toggleType('deportiva')" checked>
-          <label class="form-check-label" for="deportivaCheck">Escalada Deportiva</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="boulder indoor" id="boulderIndoorCheck" (change)="toggleType('boulder indoor')" checked>
-          <label class="form-check-label" for="boulderIndoorCheck">Boulder Indoor</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="boulder outdoor" id="boulderOutdoorCheck" (change)="toggleType('boulder outdoor')" checked>
-          <label class="form-check-label" for="boulderOutdoorCheck">Boulder Outdoor</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="clásica" id="clasicaCheck" (change)="toggleType('clásica')" checked>
-          <label class="form-check-label" for="clasicaCheck">Escalada Clásica</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="rocódromo" id="rocodromoCheck" (change)="toggleType('rocódromo')" checked>
-          <label class="form-check-label" for="rocodromoCheck">Rocódromo</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="rocódromo gratuito" id="rocodromoGratuitoCheck" (change)="toggleType('rocódromo gratuito')" checked>
-          <label class="form-check-label" for="rocodromoGratuitoCheck">Rocódromo Gratuito</label>
-        </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="boulder indoor" id="boulderIndoorCheck" (change)="toggleType('boulder indoor')" checked>
+        <label class="form-check-label" for="boulderIndoorCheck">Boulder Indoor</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="boulder outdoor" id="boulderOutdoorCheck" (change)="toggleType('boulder outdoor')" checked>
+        <label class="form-check-label" for="boulderOutdoorCheck">Boulder Outdoor</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="clásica" id="clasicaCheck" (change)="toggleType('clásica')" checked>
+        <label class="form-check-label" for="clasicaCheck">Escalada Clásica</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="rocódromo" id="rocodromoCheck" (change)="toggleType('rocódromo')" checked>
+        <label class="form-check-label" for="rocodromoCheck">Rocódromo</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="rocódromo gratuito" id="rocodromoGratuitoCheck" (change)="toggleType('rocódromo gratuito')" checked>
+        <label class="form-check-label" for="rocodromoGratuitoCheck">Rocódromo Gratuito</label>
       </div>
     </div>
   </div>
-  
+</div>

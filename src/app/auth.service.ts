@@ -1,3 +1,4 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -29,16 +30,25 @@ export class AuthService {
     );
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+  
   logout(): void {
     localStorage.removeItem('token');
     this.authStatus.next(false);
   }
 
+  
   updateUser(user: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.put(`${this.apiUrl}/update`, user, { headers });
-  }
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  const formData = new FormData();
+  Object.keys(user).forEach(key => formData.append(key, user[key]));
+
+  return this.http.put(`${this.apiUrl}/profile`, formData, { headers });
+}
 
   getUserProfile(): Observable<any> {
     const token = localStorage.getItem('token');

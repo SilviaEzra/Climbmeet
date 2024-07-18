@@ -1,16 +1,15 @@
-import { Component, AfterViewInit, NgZone } from '@angular/core';
+import { Component, AfterViewInit, NgZone, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleMapsModule, MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { HttpClient } from '@angular/common/http';
 
 interface Location {
   id: number;
-  title: string;
+  name: string;
   type: string; // Tipo de escalada
-  position: {
-    lat: number;
-    lng: number;
-  };
+  latitude: number;
+  longitude: number;
 }
 
 @Component({
@@ -20,24 +19,45 @@ interface Location {
   templateUrl: './ubicaciones.component.html',
   styleUrls: ['./ubicaciones.component.css']
 })
-export class UbicacionesComponent implements AfterViewInit {
-  center: google.maps.LatLngLiteral = { lat: 37.7749, lng: -122.4194 };
-  zoom = 8;
-  locations: Location[] = [
-    { id: 1, title: 'Escalada Deportiva 1', type: 'deportiva', position: { lat: 37.7749, lng: -122.4194 } },
-    { id: 2, title: 'Boulder Indoor 1', type: 'boulder indoor', position: { lat: 37.8044, lng: -122.2711 } },
-    { id: 3, title: 'Boulder Outdoor 1', type: 'boulder outdoor', position: { lat: 37.6879, lng: -122.4702 } },
-    { id: 4, title: 'Escalada Clásica 1', type: 'clásica', position: { lat: 37.7338, lng: -122.4467 } },
-    { id: 5, title: 'Rocódromo 1', type: 'rocódromo', position: { lat: 37.7542, lng: -122.4471 } },
-    { id: 6, title: 'Rocódromo Gratuito 1', type: 'rocódromo gratuito', position: { lat: 37.7641, lng: -122.4622 } }
-  ];
-  filteredLocations: Location[] = this.locations;
+export class UbicacionesComponent implements AfterViewInit, OnInit {
+  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
+  center: google.maps.LatLngLiteral = { lat: 41.3851, lng: 2.1734 }; // Coordenadas de Barcelona
+  zoom = 12; // Ajusta el nivel de zoom según tus necesidades
+  locations: Location[] = [];
+  filteredLocations: Location[] = [];
   selectedTypes: Set<string> = new Set(['deportiva', 'boulder indoor', 'boulder outdoor', 'clásica', 'rocódromo', 'rocódromo gratuito']);
+  infoContent: string = '';
 
-  constructor(private ngZone: NgZone) {}
+  iconUrlMap: { [key: string]: string } = {
+    'deportiva': 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+    'boulder indoor': 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+    'boulder outdoor': 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+    'clásica': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+    'rocódromo': 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
+    'rocódromo gratuito': 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
+  };
+
+  constructor(private ngZone: NgZone, private http: HttpClient) {}
+
+  ngOnInit() {
+    this.fetchLocations();
+  }
 
   ngAfterViewInit() {
     // Cualquier inicialización adicional
+  }
+
+  fetchLocations() {
+    this.http.get<Location[]>('http://localhost:3001/api/location/all').subscribe(
+      data => {
+        console.log('Fetched locations:', data);
+        this.locations = data;
+        this.filterLocations();
+      },
+      error => {
+        console.error('Error fetching locations:', error);
+      }
+    );
   }
 
   toggleType(type: string) {
@@ -51,5 +71,21 @@ export class UbicacionesComponent implements AfterViewInit {
 
   filterLocations() {
     this.filteredLocations = this.locations.filter(location => this.selectedTypes.has(location.type));
+  }
+
+  getLocationPosition(location: Location): google.maps.LatLngLiteral {
+    return { lat: location.latitude, lng: location.longitude };
+  }
+
+  openInfoWindow(marker: MapMarker, location: Location) {
+    this.infoContent = `
+      <div>
+        <h5>${location.name}</h5>
+        <p>Type: ${location.type}</p>
+        <p>Latitude: ${location.latitude}</p>
+        <p>Longitude: ${location.longitude}</p>
+      </div>
+    `;
+    this.infoWindow.open(marker);
   }
 }
